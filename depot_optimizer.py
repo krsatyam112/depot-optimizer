@@ -246,12 +246,13 @@ def plot_bubble_chart(out_df, cand_latlon, opened_idx, path):
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    import matplotlib.cm as cm
 
     fig, ax = plt.subplots(figsize=(11, 9))
 
     n_depots = len(opened_idx)
-    cmap = cm.get_cmap("tab20", max(n_depots, 1))
+    # matplotlib.cm.get_cmap() was removed in newer matplotlib (>=3.9);
+    # matplotlib.colormaps[...] is the current API.
+    cmap = matplotlib.colormaps["tab20"].resampled(max(n_depots, 1))
     depot_color = {d: cmap(k) for k, d in enumerate(opened_idx)}
 
     vol = out_df["volume"].to_numpy(dtype=float)
